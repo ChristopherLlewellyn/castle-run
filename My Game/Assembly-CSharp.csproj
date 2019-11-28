@@ -71,6 +71,7 @@
     <Compile Include="Assets\Packs\48 Particle Effect Pack\ShurikenEffectEditor\csShurikenEffectChanger.cs" />
     <Compile Include="Assets\Packs\48 Particle Effect Pack\ShurikenEffectEditor\csShurikenEffectEditor.cs" />
     <Compile Include="Assets\Packs\FullTiltBoogie\RotateFlareHolder.cs" />
+    <Compile Include="Assets\PlayerAttack.cs" />
     <Compile Include="Assets\Scripts\Camera\CameraFollow2DPlatformer.cs" />
     <Compile Include="Assets\Scripts\Camera\CameraShake.cs" />
     <Compile Include="Assets\Scripts\Camera\Parallax.cs" />

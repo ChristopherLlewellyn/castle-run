@@ -16,7 +16,6 @@ public class Player : MonoBehaviour
     public int health;
     public int numOfHearts;
     public int damage;
-    public float attackRange;
     public float knockbackForce; // what force the player RECEIVES on knockback
 
     // items
@@ -48,14 +47,6 @@ public class Player : MonoBehaviour
     public int extraJumpsValue;
     public int extraJumps;
 
-    // attacking
-    // sets a limit to our attack speed
-    private float timeBtwAttack;
-    public float startTimeBtwAttack;
-
-    public Transform attackPos;
-    public LayerMask whatIsEnemies;
-
     // camera shaking
     public float camShakeAmountOnAttack;
     public float camShakeLengthOnAttack;
@@ -66,6 +57,8 @@ public class Player : MonoBehaviour
     public GameObject playerCamera;
     CameraShake camShake;
 
+    PlayerAttack playerAttack;
+
     void Start()
     {
         rigidbody2d = GetComponent<Rigidbody2D>();
@@ -74,6 +67,7 @@ public class Player : MonoBehaviour
         circleHitbox = GetComponent<CircleCollider2D>();
         camShake = playerCamera.GetComponent<CameraShake>();
         notifications = GetComponent<Notification>();
+        playerAttack = GetComponent<PlayerAttack>();
     }
 
     void Update()
@@ -84,7 +78,6 @@ public class Player : MonoBehaviour
 
         // status checks
         CheckIfDead();
-        CheckIfAttack();
 
         // handle jump input
         if (grounded == true)
@@ -144,8 +137,8 @@ public class Player : MonoBehaviour
             case "diamond":
                 if (diamonds == 24)
                 {
-                    startTimeBtwAttack = startTimeBtwAttack / 2;
-                    notifications.ShowNotification("Attack speed doubled");
+                    playerAttack.startTimeBtwAttack = 0.2f;
+                    notifications.ShowNotification("25 diamonds: Attack speed increased");
                 }
 
                 else if (diamonds == 39)
@@ -208,46 +201,6 @@ public class Player : MonoBehaviour
     void DiamondsUI()
     {
         numDiamondsText.text = diamonds.ToString();
-    }
-
-    void CheckIfAttack()
-    {
-        // check time between attack
-        if (timeBtwAttack <= 0)
-        {
-            // then you can attack
-            timeBtwAttack = startTimeBtwAttack;
-            if (Input.GetKey(KeyCode.Space)) // space to attack
-            {
-                animator.SetTrigger("attack");
-                PlayerSoundManager.PlaySound("attack");
-
-                Collider2D[] enemiesToDamage = Physics2D.OverlapCircleAll(attackPos.position, attackRange, whatIsEnemies);
-                for (int i = 0; i < enemiesToDamage.Length; i++)
-                {
-                    if (enemiesToDamage[i].transform.parent.name == "AiEnemySlimeStatic")
-                    {
-                        enemiesToDamage[i].transform.parent.GetComponent<SlimeEnemy>().TakeDamage(damage);
-                    }
-
-                    else if (enemiesToDamage[i].transform.parent.name == "Boss")
-                    {
-                        enemiesToDamage[i].transform.parent.GetComponent<Boss>().TakeDamage(damage);
-                    }
-
-                    else
-                    {
-                        enemiesToDamage[i].transform.parent.GetComponent<Enemy>().TakeDamage(damage);
-                    }
-                }
-            }
-
-        }
-
-        else
-        {
-            timeBtwAttack -= Time.deltaTime;
-        }
     }
 
     // flip our character's image
@@ -343,12 +296,8 @@ public class Player : MonoBehaviour
     public void WinGame()
     {
         gameManager.PlayCredits();
+        playerAttack.enabled = false;
         this.enabled = false;
     }
 
-    void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(attackPos.position, attackRange);
-    }
 }

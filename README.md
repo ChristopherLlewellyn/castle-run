@@ -7,4 +7,4 @@ Make sure the game is not zipped, else it will not run. :)
 
 Source code can be found in Assets -> Scripts
 
-![Castle Run](/Screenshots/castle-run.png)
+![Castle Run](/Screenshots/castle-run.PNG)

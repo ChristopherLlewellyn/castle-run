@@ -1,5 +1,5 @@
 # castle-run
-My first 2D platformer game, made with Unity and C#
+A 2D platformer game, made with Unity and C#
 ![Castle Run](/Screenshots/castle-run.PNG)
 
 You are a knight whose castle has been overrun by undead creatures. Descend the castle and escape through the portal at the castle entrance!
